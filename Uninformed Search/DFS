@@ -1,9 +1,41 @@
-1. Start with a frontier that contains initial state
-2. Start with an empty explored set
-3. Repeat
-  > If the frontier is empty, then no solution
-  > Remove a node from the frontier ()
-  > If node contains goal state, return the solution
-  > Add node to the explored set
-  > Expand node(), add resulting nodes to the frontier if they aren't already in the frontier or the explored set
   
+class Graph:
+    def __init__(self):
+        self.graph = {} #set of edges
+    
+    def add_edge(self,u,v):
+        if u not in self.graph:
+            self.graph[u] = []
+        self.graph[u].append(v)
+
+    def dfs(self, start_node, goal):
+        frontier=[start_node] #initializing the frontier
+        explored = set()
+        while frontier:
+            current_node=frontier.pop() # Pop the last node from frontier
+            #Goal Test
+            if(current_node==goal):
+                return True
+            if current_node not in explored:
+                explored.add(current_node)
+            else:
+                continue
+            if current_node in self.graph:
+                for neighbours in self.graph[current_node]:
+                    if neighbours not in explored:
+                       frontier.append(neighbours)#frontier.extend(self.graph[current_node]) # Add all the neighbors of current node to frontier
+    def explored(self):
+        
+
+
+if __name__ == "__main__":
+    g=Graph()
+    g.add_edge(0, 1)
+    g.add_edge(0, 2)
+    g.add_edge(1, 2)
+    g.add_edge(2, 0)
+    g.add_edge(2, 3)
+    g.add_edge(2, 4)
+    g.dfs(0,4)
+    print(4)
+    g.explored()

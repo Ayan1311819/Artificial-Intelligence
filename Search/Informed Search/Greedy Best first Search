@@ -1,1 +1,130 @@
-here, f(n)=h(n)
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyOufQwi3yHfiyGQIdDB/Qtn",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/Ayan1311819/Artificial-Intelligence/blob/main/Search/Informed%20Search/Greedy%20Best%20first%20Search\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 7,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "9TCtBwgFe43y",
+        "outputId": "6bb3cb81-5648-4b7d-e824-f3c7b213dfbd"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "| Greedy Best First Search Traversal |\n",
+            "A-->C-->D\n"
+          ]
+        }
+      ],
+      "source": [
+        "import math\n",
+        "coordinates = {\n",
+        "    \"A\": (0, 0),\n",
+        "    \"B\": (5,3),\n",
+        "    \"C\": (0,1),\n",
+        "    \"D\": (2,3),\n",
+        "}\n",
+        "class Graph:\n",
+        "    def __init__(self):\n",
+        "        self.graph = {}\n",
+        "\n",
+        "    def add_edge(self, u, v, weight):\n",
+        "        if u not in self.graph:\n",
+        "            self.graph[u] = []\n",
+        "        self.graph[u].append((v, weight))\n",
+        "\n",
+        "    def get_neighbors(self, u):\n",
+        "        return [v for v, _ in self.graph.get(u, [])]\n",
+        "\n",
+        "    def euclidean_dist(self,P1,P2):\n",
+        "        x1,y1=P1\n",
+        "        x2,y2=P2\n",
+        "        distance = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)\n",
+        "        return distance\n",
+        "\n",
+        "    def heuristic(self, current_node):\n",
+        "        ED=[]\n",
+        "        for neighbor, weight in self.graph.get(current_node, []):\n",
+        "            P1=coordinates[\"D\"]\n",
+        "            P2=coordinates[neighbor]\n",
+        "            ED.append(self.euclidean_dist(P1,P2))\n",
+        "        return ED\n",
+        "\n",
+        "    def Astar(self, start_node, goal):\n",
+        "        frontier = [(start_node,0)]\n",
+        "        explored = set()\n",
+        "\n",
+        "        while frontier:\n",
+        "            i=0\n",
+        "            current_node, current_cost = frontier.pop(0)\n",
+        "            if current_node == goal:\n",
+        "                print(current_node)\n",
+        "                return True\n",
+        "\n",
+        "            if current_node not in explored:\n",
+        "                explored.add(current_node)\n",
+        "                print(current_node,end=\"-->\")\n",
+        "\n",
+        "                for neighbor, weight in self.graph.get(current_node, []):\n",
+        "                    estimated_cost = self.heuristic(current_node)[i]\n",
+        "                    i=i+1\n",
+        "\n",
+        "                    if neighbor not in explored:\n",
+        "                        frontier.append((neighbor,estimated_cost))\n",
+        "                        frontier.sort(key=lambda x: x[1])\n",
+        "        print(\"Goal not found\")\n",
+        "\n",
+        "# Example usage:\n",
+        "if __name__ == \"__main__\":\n",
+        "    g = Graph()\n",
+        "    g.add_edge(\"A\", \"B\", 5)\n",
+        "    g.add_edge(\"A\", \"C\", 3)\n",
+        "    g.add_edge(\"B\", \"C\", 2)\n",
+        "    g.add_edge(\"C\", \"D\", 4)\n",
+        "    print(\"| Greedy Best First Search Traversal |\")\n",
+        "    start_node = \"A\"\n",
+        "    goal_node = \"D\"\n",
+        "    g.Astar(start_node, goal_node)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "tc96-1R3iU5M"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
